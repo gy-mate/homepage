@@ -1,7 +1,8 @@
 {
   "scripts": {
-    "build": "vitepress build content",
-    "preview": "vitepress preview content"
+    "dev": "vitepress dev pages",
+    "build": "vitepress build pages",
+    "preview": "vitepress preview pages"
   },
   "dependencies": {
     "vitepress": "^1.6.4"

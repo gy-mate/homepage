@@ -3,9 +3,9 @@
 layout: home
 
 hero:
-  name: "Máté Gyöngyösi"
-  text: "My personal website"
-  tagline: My great project tagline
+  name: Máté Gyöngyösi
+  text: Software Developer, Railway Expert, Sociologist
+  tagline: Welcome to my website!
   actions:
     - theme: brand
       text: Markdown Examples
@@ -13,6 +13,9 @@ hero:
     - theme: alt
       text: API Examples
       link: /api-examples
+  image:
+    src: avatar.webp
+    alt: My profile picture
 
 features:
   - title: Feature A
@@ -22,4 +25,3 @@ features:
   - title: Feature C
     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
 ---
-

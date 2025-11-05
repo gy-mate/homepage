@@ -37,7 +37,7 @@ jobs:
 
       - name: Deploy to AWS S3
         run: |
-          aws s3 sync content/.vitepress/dist s3://gy-mate-homepage \
+          aws s3 sync pages/.vitepress/dist s3://gy-mate-homepage \
             --delete
 
       - name: Invalidate CloudFront cache

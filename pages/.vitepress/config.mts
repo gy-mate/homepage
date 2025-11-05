@@ -2,10 +2,8 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  srcDir: "content",
-  
   title: "Máté Gyöngyösi",
-  description: "My personal website",
+  description: "Máté's website",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
@@ -24,6 +22,10 @@ export default defineConfig({
     ],
 
     socialLinks: [
+      { icon: 'element', link: 'https://matrix.to/#/@gymate:grin.hu' },
+      { icon: 'telegram', link: 'https://t.me/gymate' },
+      { icon: 'mastodon', link: 'https://mastodon.grin.hu/@gymate' },
+      { icon: 'linkedin', link: 'https://linkedin.com/in/gymate/' },
       { icon: 'github', link: 'https://github.com/gy-mate/homepage' }
     ]
   }
