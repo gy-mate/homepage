@@ -3,7 +3,7 @@
     "build": "vitepress build content",
     "preview": "vitepress preview content"
   },
-  "devDependencies": {
+  "dependencies": {
     "vitepress": "^1.6.4"
   }
 }

@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  deploy-to-aws:
+  deploy:
     runs-on: macos-latest
 
     steps:
@@ -22,7 +22,7 @@ jobs:
           version: 10
 
       - name: Install dependencies
-        run: pnpm install --dev --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
