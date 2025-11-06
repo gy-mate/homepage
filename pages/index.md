@@ -5,23 +5,28 @@ layout: home
 hero:
   name: Máté Gyöngyösi
   text: Software Developer, Railway Expert, Sociologist
-  tagline: Welcome to my website!
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
+      text: My Projects
+      link: /projects
     - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: Curriculum Vitae
+      link: /cv
   image:
     src: avatar.webp
     alt: My profile picture
 
 features:
-  - title: Feature A
+  - icon:
+      src: https://www.vectorlogo.zone/logos/java/java-icon.svg
+    title: Java
     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
+  - icon: 
+      src: https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg
+    title: Python
     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
+  - icon:
+      src: https://wiki.openstreetmap.org/w/images/7/79/Public-images-osm_logo.svg
+    title: OpenStreetMap
     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
 ---
