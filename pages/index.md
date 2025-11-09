@@ -8,7 +8,7 @@ hero:
   actions:
     - theme: brand
       text: My Projects
-      link: /projects
+      link: /projects/cli
     - theme: alt
       text: Curriculum Vitae
       link: /cv

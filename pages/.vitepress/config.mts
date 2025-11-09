@@ -11,7 +11,7 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Projects', link: '/projects/list' },
+      { text: 'Projects', link: '/projects/cli' },
       { text: 'CV', link: '/cv' }
     ],
 
@@ -32,7 +32,7 @@ export default defineConfig({
         {
           text: 'Projects',
           items: [
-            { text: 'CLIs', link: '/projects/list' },
+            { text: 'CLIs', link: '/projects/cli' },
             { text: 'GTFS Feeds', link: '/projects/gtfs' },
           ]
         }
