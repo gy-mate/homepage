@@ -47,7 +47,7 @@ export default defineConfig({
     footer: {
       message: `
       This website is released under GPL-3.0 
-      and served from the <a href="https://aws.amazon.com/cloudfront/features">AWS CloudFront data centre</a> closest to you.<br>
+      and served from the <a href="https://aws.amazon.com/cloudfront/features">AWS CloudFront edge location</a> closest to you.<br>
 
       Powered by <a href="https://vitepress.dev">VitePress</a>.
       `
