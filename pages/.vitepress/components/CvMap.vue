@@ -14,84 +14,87 @@
   import scrollama from 'scrollama'
   
   onMounted(() => {
-    const locParliament = [19.04556, 47.50704]
-    const locCastle = [19.03945, 47.49621]
-    const zoomStart = 15
-    const zoomEnd = 17
-  
+    const loc1 = [19.04556, 47.50694];    // Parliament
+    const loc2 = [19.03945, 47.49621];    // Buda Castle
+
+    const zoom1 = 15, zoom2 = 17;
+
     const map = new maplibregl.Map({
       container: 'map',
       style: 'https://tiles.openfreemap.org/styles/liberty',
-      center: locParliament,
-      zoom: zoomStart
-    })
-  
+      center: loc1,
+      zoom: zoom1
+    });
+
     // Disable map interactions in order not to interfere with scrollytelling
-    map.scrollZoom.disable()
-    map.boxZoom.disable()
-    map.dragRotate.disable()
-    map.dragPan.disable()
-    map.keyboard.disable()
-    map.doubleClickZoom.disable()
-    map.touchZoomRotate.disable()
-  
-    map.once('idle', () => {
-      map.setCenter(locParliament)
-      map.setZoom(zoomStart)
-  
-      const card1 = document.createElement('div')
-      card1.className = 'marker-card'
-      card1.innerHTML = '<img src="" alt="Parliament"><p>Hungarian Parliament</p>'
-  
-      const card2 = document.createElement('div')
-      card2.className = 'marker-card'
-      card2.innerHTML = '<img src="" alt="Castle"><p>Buda Castle</p>'
-  
+    map.scrollZoom.disable();
+    map.boxZoom.disable();
+    map.dragRotate.disable();
+    map.dragPan.disable();
+    map.keyboard.disable();
+    map.doubleClickZoom.disable();
+    map.touchZoomRotate.disable();
+
+    map.on('load', () => {
+      // Create two marker cards
+      const card1 = document.createElement('div');
+      card1.className = 'marker-card';
+      card1.innerHTML = '<img src="" alt="Image 1"><p>First location description.</p>';
+
+      const card2 = document.createElement('div');
+      card2.className = 'marker-card';
+      card2.innerHTML = '<img src="" alt="Image 2"><p>Second location description.</p>';
+
       const marker1 = new maplibregl.Marker(card1, { offset: [0, -75] })
-        .setLngLat(locParliament)
-        .addTo(map)
+        .setLngLat(loc1)
+        .addTo(map);
+
       const marker2 = new maplibregl.Marker(card2, { offset: [0, -75] })
-        .setLngLat(locCastle)
-        .addTo(map)
-  
-      card2.style.opacity = 0
-  
-      const scroller = scrollama()
+        .setLngLat(loc2)
+        .addTo(map);
+
+      // Initially hide second marker
+      card2.style.opacity = 0;
+
+      const scroller = scrollama();
+
       scroller
-        .setup({ step: '.step', offset: 0.5, progress: true })
-        .onStepProgress(resp => {
-          if (resp.index === 0) {
-            const t = Math.max(0, Math.min(1, resp.progress))
-            const lng = locParliament[0] + (locCastle[0] - locParliament[0]) * t
-            const lat = locParliament[1] + (locCastle[1] - locParliament[1]) * t
-            const zoom = zoomStart + (zoomEnd - zoomStart) * t
-  
-            map.easeTo({
-              center: [lng, lat],
-              zoom,
-              duration: 100,
-              easing: n => n
-            })
-  
-            card1.style.opacity = 1 - t
-            card2.style.opacity = t
+        .setup({
+          step: ".step",
+          offset: 0.5,
+          progress: true
+        })
+        .onStepEnter(response => {
+          if (response.index === 0) {
+            card1.style.opacity = 1;
+            card2.style.opacity = 0;
+          }
+          if (response.index === 1) {
+            card1.style.opacity = 0;
+            card2.style.opacity = 1;
           }
         })
-        .onStepEnter(resp => {
-          if (resp.index === 1) {
-            map.easeTo({
-              center: locCastle,
-              zoom: zoomEnd,
-              duration: 800,
-              easing: n => n
-            })
-            card1.style.opacity = 0
-            card2.style.opacity = 1
-          }
-        })
-  
-      window.addEventListener('resize', scroller.resize)
-    })
+        .onStepProgress(response => {
+          // Interpolate camera between loc1 and loc2
+          const t = Math.min(Math.max(response.progress, 0), 1);
+          const lng = loc1[0] + (loc2[0] - loc1[0]) * t;
+          const lat = loc1[1] + (loc2[1] - loc1[1]) * t;
+          const zoom = zoom1 + (zoom2 - zoom1) * t;
+
+          map.easeTo({
+            center: [lng, lat],
+            zoom: zoom,
+            duration: 100,
+            easing: n => n // linear for smoother interpolation
+          });
+
+          // Fade cards gradually
+          card1.style.opacity = 1 - t;
+          card2.style.opacity = t;
+        });
+
+      window.addEventListener('resize', scroller.resize);
+    });
   
     onUnmounted(() => {
       map.remove()
