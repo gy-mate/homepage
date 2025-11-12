@@ -4,8 +4,20 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "Máté Gyöngyösi",
   description: "Máté's website",
-
+  
   cleanUrls: true,
+
+  vite: {
+    build: {
+      target: 'es2022'
+    },
+
+    optimizeDeps: {
+      esbuildOptions: {
+        target: 'es2022'
+      }
+    }
+  },
 
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
