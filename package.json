@@ -2,7 +2,7 @@
   "scripts": {
     "dev": "vitepress dev pages",
     "build": "vitepress build pages",
-    "preview": "vitepress preview pages"
+    "uat": "vitepress build pages && vitepress preview pages"
   },
   "dependencies": {
     "maplibre-gl": "^5.14.0",
