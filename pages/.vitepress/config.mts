@@ -7,18 +7,6 @@ export default defineConfig({
   
   cleanUrls: true,
 
-  vite: {
-    build: {
-      target: 'es2022'
-    },
-
-    optimizeDeps: {
-      esbuildOptions: {
-        target: 'es2022'
-      }
-    }
-  },
-
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
