@@ -10,7 +10,10 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Projects', link: '/projects/cli' },
+      { text: 'Projects', link: '/projects/kalauz' },
+      { text: 'Achievements', link: '/achievements' },
+      { text: 'Journeys', link: '/journeys' },
+      { text: 'Misc', link: '/misc/commands' },
       { text: 'CV', link: '/cv' }
     ],
 
@@ -29,10 +32,23 @@ export default defineConfig({
     sidebar: {
       '/projects': [
         {
-          text: 'Projects',
+          text: 'Past',
           items: [
-            { text: 'CLIs', link: '/projects/cli' },
+            { text: 'MÁV', link: '/projects/mav' },
+          ]
+        },
+        {
+          text: 'Present',
+          items: [
+            { text: 'Kalauz', link: '/projects/kalauz' },
             { text: 'GTFS Feeds', link: '/projects/gtfs' },
+            { text: 'VIK Wiki', link: '/projects/vikwiki' },
+          ]
+        },
+        {
+          text: 'Future',
+          items: [
+            { text: 'Ideas', link: '/projects/ideas' },
           ]
         }
       ]
