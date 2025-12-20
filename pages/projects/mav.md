@@ -11,7 +11,7 @@ instead of increasing the number of carriages from
 (S 16290) on 21 December just 5 minutes after IC 606. 
 The operating time of the InterCity service was also extended until 20:23 with the new IC 628.
 
-[***[Press release]***](https://web.archive.org/web/20210917213041/https://nogradhont.hu/aktualis/2018/12/ha-kell-mentesito-vonatot-is-indit-az-unnepek-alatt-a-mav)
+[***Press release***](https://web.archive.org/web/20210917213041/https://nogradhont.hu/aktualis/2018/12/ha-kell-mentesito-vonatot-is-indit-az-unnepek-alatt-a-mav)
 
 IC 628 was kept in the timetable permanently for Fridays and Sundays and 
-[runs ever since](https://web.archive.org/web/20251126082006/https://www.mavcsoport.hu/sites/default/files/upload/page/100_v0905.pdf#page=15).
+[runs ever since](https://web.archive.org/web/20251220232135/https://www.mavcsoport.hu/sites/default/files/upload/page/100_v0905.pdf#page=15).
