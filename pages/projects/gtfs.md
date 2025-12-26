@@ -1,7 +1,9 @@
 # [GTFS Feeds](https://github.com/gy-mate/gtfs-feeds)
 
-You can find below the list of GTFS feeds that I maintain.
+You can find the list of GTFS feeds that I maintain below.
 
-## Budapest
+## Hungary
 
-- [Funicular](/gtfs/gtfs_hu_bkk.zip)
+### Budapest
+
+- [Funicular](/gtfs/gtfs_hu_funicular.zip)
