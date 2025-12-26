@@ -6,7 +6,7 @@ export default defineConfig({
   description: "Máté's website",
   
   cleanUrls: true,
-
+  
   themeConfig: {
     nav: [
       { text: 'Home', link: '/' },
@@ -55,7 +55,7 @@ export default defineConfig({
     },
 
     editLink: {
-      pattern: 'https://github.com/gy-mate/homepage/tree/main/pages/:path',
+      pattern: 'https://github.dev/gy-mate/homepage/tree/main/pages/:path',
       text: 'Suggest a change to this page'
     },
 
