@@ -5,7 +5,7 @@
     "uat": "vitepress build pages && vitepress preview pages"
   },
   "dependencies": {
-    "maplibre-gl": "^5.15.0",
+    "maplibre-gl": "^5.18.0",
     "scrollama": "^3.2.0",
     "vitepress": "^1.6.4"
   }
