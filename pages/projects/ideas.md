@@ -4,6 +4,14 @@ In order of importance.
 
 Feel free to make them happen yourself!
 
+## Get a Reply!
+
+An app that knows which public body to contact and writes you an email in case another one doesn't reply to your enquiry.
+
+## Volán OSM Import
+
+Prepare the Volán OpenStreetMap import by [mapping termini](https://hedge.grin.hu/#Haladáskövető-táblázat).
+
 ## Phone Street View
 
 Estimated cost: 650.000 HUF (€1700)
@@ -21,3 +29,7 @@ Estimated cost: 650.000 HUF (€1700)
 ## Lost & Found
 
 An app that helps you find the current & future location of the public transport vehicle you've left your stuff on.
+
+## Where Does My Water Come From?
+
+An OSM-based map that shows where drinking water is originated and transported in pipes.
