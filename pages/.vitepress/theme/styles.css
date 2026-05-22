@@ -1,3 +1,16 @@
+.cv-page .VPContent,
+.cv-page .VPPage,
+.cv-page .content,
+.cv-page .content-body,
+.cv-page .content-container,
+.cv-page main {
+  padding: 0 !important;
+  margin: 0 !important;
+  max-width: none !important;
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
 :root {
     --vp-home-hero-name-color: transparent;
     --vp-home-hero-name-background: linear-gradient(
