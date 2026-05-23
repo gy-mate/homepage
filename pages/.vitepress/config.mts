@@ -67,5 +67,11 @@ export default defineConfig({
       Powered by <a href="https://vitepress.dev">VitePress</a>.
       `
     }
+  },
+  
+  vite: {
+    build: {
+      chunkSizeWarningLimit: 1250,
+    },
   }
 })
