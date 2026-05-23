@@ -11,8 +11,9 @@ const PAN_PHASE_START = ZOOM_OUT_PHASE_END
 const PAN_PHASE_END = 0.65
 const ZOOM_IN_PHASE_START = PAN_PHASE_END
 
-const STYLE_LIGHT = 'https://vector.openstreetmap.org/styles/shortbread/colorful.json'
-const STYLE_DARK = 'https://vector.openstreetmap.org/styles/shortbread/eclipse.json'
+const STYLES_FOLDER = '/OSM/styles/'
+const STYLE_LIGHT = STYLES_FOLDER + 'colorful.json'
+const STYLE_DARK = STYLES_FOLDER + 'eclipse.json'
 
 const monthYearFormatter = new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric' })
 
