@@ -9,7 +9,7 @@ from_date,to_date,job_title,organization,latitude,longitude,map_zoom_level
 2019-04,2019-04,Passenger Flow Survey Coordinator,Centre for Kecskemét Transport (KeKo) / Mobilissimus Ltd.,46.914220,19.698207,14
 2019-06,2019-06,Passenger Flow Surveyor,Hungarian State Railways (MÁV),47.183019,18.425000,15
 2019-06,2019-06,Matura,Fazekas Mihály Gimnázium,47.489246,19.076184,17
-2019-11,2019-11,Passenger Flow Survey Coordinator (M2 / M4),Centre for Budapest Transport (BKK),47.5004,19.0826,14
+2019-11,2019-11,Passenger Flow Survey Coordinator,Centre for Budapest Transport (BKK),47.5004,19.0826,14
 2021-06,2021-06,Passenger Flow Surveyor,Esztergom City Municipality / Mobilissimus Ltd.,47.794126,18.742011,14
 2021-08,2021-08,Passenger Information Assistant,Volánbusz Plc.,47.474829,19.098825,17
 2019-09,2022-06,Sociologist (BA),Eötvös Loránd University (ELTE),47.474411,19.062020,16
