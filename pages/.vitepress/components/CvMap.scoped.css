@@ -1,0 +1,38 @@
+.cv-scroll {
+  position: relative;
+  width: 100%;
+}
+
+.cv-map {
+  position: sticky;
+  top: var(--vp-nav-height, 64px);
+  height: calc(100vh - var(--vp-nav-height, 64px));
+  width: 100%;
+  margin-bottom: calc(-100vh + var(--vp-nav-height, 64px));
+}
+
+.cv-triggers {
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.cv-trigger {
+  height: 275vh;
+  scroll-snap-align: start;
+}
+
+.cv-trigger__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .cv-trigger {
+    height: 150vh;
+  }
+}
