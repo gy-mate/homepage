@@ -2,7 +2,8 @@ import { onBeforeUnmount, onMounted, ref, shallowRef } from 'vue'
 import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import Papa from 'papaparse'
-import cvEventsCsv from './CvMapEvents.csv?raw'
+
+const CV_CSV_URL = '/CV.csv'
 
 const REST_RATIO = 0.1
 const SEGMENT_FIT_PADDING = 80
@@ -32,18 +33,22 @@ function formatDateRange(from_date, to_date) {
   return `${formatIsoMonth(from_date)} – ${formatIsoMonth(to_date)}`
 }
 
-const timeline = Papa.parse(cvEventsCsv, {
-  header: true,
-  skipEmptyLines: true,
-}).data.map((row) => ({
-  from_date: row.from_date,
-  to_date: row.to_date,
-  job_title: row.job_title,
-  organization: row.organization,
-  latitude: parseFloat(row.latitude),
-  longitude: parseFloat(row.longitude),
-  map_zoom_level: parseInt(row.map_zoom_level, 10),
-}))
+async function loadTimeline() {
+  const response = await fetch(CV_CSV_URL)
+  const csvText = await response.text()
+  return Papa.parse(csvText, {
+    header: true,
+    skipEmptyLines: true,
+  }).data.map((row) => ({
+    from_date: row.from_date,
+    to_date: row.to_date,
+    job_title: row.job_title,
+    organization: row.organization,
+    latitude: parseFloat(row.latitude),
+    longitude: parseFloat(row.longitude),
+    map_zoom_level: parseInt(row.map_zoom_level, 10),
+  }))
+}
 
 function interpolate(fromValue, toValue, fraction) {
   return fromValue + (toValue - fromValue) * fraction
@@ -74,6 +79,7 @@ export default {
     const mapContainer = ref(null)
     const triggers = ref(null)
     const map = shallowRef(null)
+    const timeline = ref([])
     const markers = []
     const segmentDipTargetZooms = []
     let themeObserver = null
@@ -89,7 +95,7 @@ export default {
       const containerTop = scrollContainer.getBoundingClientRect().top
       const scrollFraction = clamp(-containerTop / scrollableHeight, 0, 1)
 
-      const eventCount = timeline.length
+      const eventCount = timeline.value.length
       const segmentCount = eventCount - 1
       if (segmentCount <= 0) return 0
 
@@ -110,9 +116,9 @@ export default {
     function recomputeSegmentZoomDips() {
       if (!map.value) return
       segmentDipTargetZooms.length = 0
-      for (let segmentIndex = 0; segmentIndex < timeline.length - 1; segmentIndex++) {
-        const fromEvent = timeline[segmentIndex]
-        const toEvent = timeline[segmentIndex + 1]
+      for (let segmentIndex = 0; segmentIndex < timeline.value.length - 1; segmentIndex++) {
+        const fromEvent = timeline.value[segmentIndex]
+        const toEvent = timeline.value[segmentIndex + 1]
         const fromZoom = fromEvent.map_zoom_level ?? 12
         const toZoom = toEvent.map_zoom_level ?? 12
         const endpointMinZoom = Math.min(fromZoom, toZoom)
@@ -139,10 +145,10 @@ export default {
 
       const eventProgress = computeEventProgress()
       const fromEventIndex = Math.floor(eventProgress)
-      const toEventIndex = Math.min(timeline.length - 1, fromEventIndex + 1)
+      const toEventIndex = Math.min(timeline.value.length - 1, fromEventIndex + 1)
       const segmentFraction = eventProgress - fromEventIndex
-      const fromEvent = timeline[fromEventIndex]
-      const toEvent = timeline[toEventIndex]
+      const fromEvent = timeline.value[fromEventIndex]
+      const toEvent = timeline.value[toEventIndex]
       const fromZoom = fromEvent.map_zoom_level ?? 12
       const toZoom = toEvent.map_zoom_level ?? 12
 
@@ -202,12 +208,14 @@ export default {
       handleScroll()
     }
 
-    onMounted(() => {
+    onMounted(async () => {
+      timeline.value = await loadTimeline()
+
       map.value = new maplibregl.Map({
         container: mapContainer.value,
         style: currentStyleUrl(),
-        center: [timeline[0].longitude, timeline[0].latitude],
-        zoom: timeline[0].map_zoom_level ?? 12,
+        center: [timeline.value[0].longitude, timeline.value[0].latitude],
+        zoom: timeline.value[0].map_zoom_level ?? 12,
         interactive: false,
         attributionControl: { compact: true },
       })
@@ -224,7 +232,7 @@ export default {
       })
 
       map.value.on('load', () => {
-        timeline.forEach((item) => {
+        timeline.value.forEach((item) => {
           const el = document.createElement('div')
           el.className = 'cv-card'
           el.innerHTML = `
