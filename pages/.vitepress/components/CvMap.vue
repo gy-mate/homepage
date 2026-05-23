@@ -7,8 +7,15 @@ const mapContainer = ref(null)
 const triggers = ref(null)
 const map = shallowRef(null)
 const markers = []
-let observer = null
+const segmentDipTargetZooms = []
 let themeObserver = null
+let rafId = null
+const REST_RATIO = 0.1
+const SEGMENT_FIT_PADDING = 80
+const ZOOM_OUT_PHASE_END = 0.35
+const PAN_PHASE_START = ZOOM_OUT_PHASE_END
+const PAN_PHASE_END = 0.65
+const ZOOM_IN_PHASE_START = PAN_PHASE_END
 
 const STYLE_LIGHT = 'https://vector.openstreetmap.org/styles/shortbread/colorful.json'
 const STYLE_DARK = 'https://vector.openstreetmap.org/styles/shortbread/eclipse.json'
@@ -134,22 +141,150 @@ const timeline = [
     date: 'Sep 2024 – present',
     title: 'Java Developer',
     org: 'P92 Digital',
-    coords: [19.044977, 47.586088],
-    zoom: 13,
+    coords: [19.05012, 47.58741],
+    zoom: 12,
   }
 ]
 
-function activate(idx) {
-  markers.forEach((m, i) => {
-    m.getElement().classList.toggle('cv-card--active', i === idx)
+function interpolate(fromValue, toValue, fraction) {
+  return fromValue + (toValue - fromValue) * fraction
+}
+
+function smoothstep(value) {
+  return value * value * (3 - 2 * value)
+}
+
+function easeInOutCubic(value) {
+  return value < 0.5
+    ? 4 * value * value * value
+    : 1 - Math.pow(-2 * value + 2, 3) / 2
+}
+
+function easeInOutQuintic(value) {
+  return value < 0.5
+    ? 16 * value * value * value * value * value
+    : 1 - Math.pow(-2 * value + 2, 5) / 2
+}
+
+function clamp(value, min, max) {
+  return Math.max(min, Math.min(max, value))
+}
+
+function computeEventProgress() {
+  const scrollContainer = triggers.value
+  if (!scrollContainer) return 0
+
+  const scrollableHeight = scrollContainer.offsetHeight - window.innerHeight
+  if (scrollableHeight <= 0) return 0
+
+  const containerTop = scrollContainer.getBoundingClientRect().top
+  const scrollFraction = clamp(-containerTop / scrollableHeight, 0, 1)
+
+  const eventCount = timeline.length
+  const segmentCount = eventCount - 1
+  if (segmentCount <= 0) return 0
+
+  const positionAcrossSegments = scrollFraction * segmentCount
+  const segmentIndex = Math.min(segmentCount - 1, Math.floor(positionAcrossSegments))
+  const positionInSegment = positionAcrossSegments - segmentIndex
+
+  let eventProgress
+  if (positionInSegment < REST_RATIO) {
+    eventProgress = segmentIndex
+  } else {
+    const travelFraction = (positionInSegment - REST_RATIO) / (1 - REST_RATIO)
+    eventProgress = segmentIndex + travelFraction
+  }
+  return clamp(eventProgress, 0, eventCount - 1)
+}
+
+function recomputeSegmentZoomDips() {
+  if (!map.value) return
+  segmentDipTargetZooms.length = 0
+  for (let segmentIndex = 0; segmentIndex < timeline.length - 1; segmentIndex++) {
+    const fromEvent = timeline[segmentIndex]
+    const toEvent = timeline[segmentIndex + 1]
+    const fromZoom = fromEvent.zoom ?? 12
+    const toZoom = toEvent.zoom ?? 12
+    const endpointMinZoom = Math.min(fromZoom, toZoom)
+    const sameLocation =
+      fromEvent.coords[0] === toEvent.coords[0] &&
+      fromEvent.coords[1] === toEvent.coords[1]
+    if (sameLocation) {
+      segmentDipTargetZooms.push(endpointMinZoom)
+      continue
+    }
+    const fitBounds = new maplibregl.LngLatBounds()
+    fitBounds.extend(fromEvent.coords)
+    fitBounds.extend(toEvent.coords)
+    const fitCamera = map.value.cameraForBounds(fitBounds, {
+      padding: SEGMENT_FIT_PADDING,
+    })
+    const viaZoom = fitCamera ? fitCamera.zoom : endpointMinZoom
+    segmentDipTargetZooms.push(Math.min(viaZoom, endpointMinZoom))
+  }
+}
+
+function updateCamera() {
+  if (!map.value || markers.length === 0) return
+
+  const eventProgress = computeEventProgress()
+  const fromEventIndex = Math.floor(eventProgress)
+  const toEventIndex = Math.min(timeline.length - 1, fromEventIndex + 1)
+  const segmentFraction = eventProgress - fromEventIndex
+  const fromEvent = timeline[fromEventIndex]
+  const toEvent = timeline[toEventIndex]
+  const fromZoom = fromEvent.zoom ?? 12
+  const toZoom = toEvent.zoom ?? 12
+
+  const rawPanProgress = clamp(
+    (segmentFraction - PAN_PHASE_START) / (PAN_PHASE_END - PAN_PHASE_START),
+    0,
+    1
+  )
+  const panFraction = easeInOutQuintic(rawPanProgress)
+  const center = [
+    interpolate(fromEvent.coords[0], toEvent.coords[0], panFraction),
+    interpolate(fromEvent.coords[1], toEvent.coords[1], panFraction),
+  ]
+
+  const zoomOutAmount = easeInOutCubic(
+    clamp(segmentFraction / ZOOM_OUT_PHASE_END, 0, 1)
+  )
+  const zoomInAmount = easeInOutCubic(
+    clamp(
+      (segmentFraction - ZOOM_IN_PHASE_START) / (1 - ZOOM_IN_PHASE_START),
+      0,
+      1
+    )
+  )
+  const dipFactor = Math.min(zoomOutAmount, 1 - zoomInAmount)
+  const dipTargetZoom = segmentDipTargetZooms[fromEventIndex] ?? Math.min(fromZoom, toZoom)
+  const zoomBase = interpolate(fromZoom, toZoom, panFraction)
+  const zoom = interpolate(zoomBase, dipTargetZoom, dipFactor)
+
+  map.value.jumpTo({ center, zoom })
+
+  const cardFocusProgress = fromEventIndex + panFraction
+  const nearestEventIndex = Math.round(cardFocusProgress)
+  markers.forEach((marker, cardIndex) => {
+    const cardInner = marker.getElement().firstElementChild
+    if (!cardInner) return
+    const distanceFromFocus = Math.abs(cardFocusProgress - cardIndex)
+    const cardWeight = clamp(1 - distanceFromFocus, 0, 1)
+    const easedCardWeight = smoothstep(cardWeight)
+    cardInner.style.opacity = (0.25 + 0.75 * easedCardWeight).toFixed(3)
+    cardInner.style.transform = `scale(${(0.76 + 0.24 * easedCardWeight).toFixed(3)})`
+    cardInner.style.filter = `saturate(${(0.4 + 0.6 * easedCardWeight).toFixed(3)})`
+    cardInner.style.zIndex = cardIndex === nearestEventIndex ? '5' : '1'
   })
-  const item = timeline[idx]
-  map.value.flyTo({
-    center: item.coords,
-    zoom: item.zoom ?? 12,
-    speed: 0.7,
-    curve: 1.4,
-    essential: true,
+}
+
+function handleScroll() {
+  if (rafId != null) return
+  rafId = requestAnimationFrame(() => {
+    rafId = null
+    updateCamera()
   })
 }
 
@@ -194,28 +329,25 @@ onMounted(() => {
       markers.push(marker)
     })
 
-    const triggerEls = triggers.value.querySelectorAll('.cv-trigger')
-    observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)
-        if (visible.length) {
-          const idx = Number(visible[0].target.dataset.idx)
-          activate(idx)
-        }
-      },
-      { threshold: [0.4, 0.6, 0.8], rootMargin: '-20% 0px -20% 0px' }
-    )
-    triggerEls.forEach((t) => observer.observe(t))
-    activate(0)
+    recomputeSegmentZoomDips()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('resize', handleResize, { passive: true })
+    updateCamera()
   })
 })
 
+function handleResize() {
+  recomputeSegmentZoomDips()
+  handleScroll()
+}
+
 onBeforeUnmount(() => {
-  observer?.disconnect()
+  window.removeEventListener('scroll', handleScroll)
+  window.removeEventListener('resize', handleResize)
+  if (rafId != null) cancelAnimationFrame(rafId)
   themeObserver?.disconnect()
   markers.length = 0
+  segmentDipTargetZooms.length = 0
   map.value?.remove()
 })
 </script>
@@ -257,7 +389,7 @@ onBeforeUnmount(() => {
 }
 
 .cv-trigger {
-  height: 100vh;
+  height: 275vh;
   scroll-snap-align: start;
 }
 
@@ -272,7 +404,7 @@ onBeforeUnmount(() => {
 
 @media (max-width: 640px) {
   .cv-trigger {
-    height: 90vh;
+    height: 150vh;
   }
 }
 </style>
@@ -294,11 +426,7 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  opacity: 0.35;
-  transform: scale(0.78);
   transform-origin: bottom center;
-  transition: opacity 0.45s ease, transform 0.45s ease, filter 0.45s ease;
-  filter: saturate(0.5);
   will-change: transform, opacity;
 }
 
@@ -354,26 +482,6 @@ onBeforeUnmount(() => {
   height: 14px;
   background: var(--cv-card-accent);
   opacity: 0.7;
-}
-
-.cv-card--active {
-  z-index: 5;
-}
-
-.cv-card--active .cv-card__inner {
-  opacity: 1;
-  transform: scale(1);
-  filter: saturate(1);
-}
-
-.cv-card--active .cv-card__body {
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
-}
-
-.cv-card--active .cv-card__pin {
-  width: 18px;
-  height: 18px;
-  box-shadow: 0 0 0 6px rgba(43, 207, 98, 0.22), 0 2px 8px rgba(0, 0, 0, 0.35);
 }
 
 @media (max-width: 640px) {
