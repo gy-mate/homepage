@@ -22,6 +22,20 @@ function currentStyleUrl() {
   return document.documentElement.classList.contains('dark') ? STYLE_DARK : STYLE_LIGHT
 }
 
+async function loadStyle(styleUrl) {
+  const response = await fetch(styleUrl)
+  const style = await response.json()
+  if (Array.isArray(style.sprite)) {
+    style.sprite = style.sprite.map((sprite) => ({
+      ...sprite,
+      url: new URL(sprite.url, window.location.origin).toString(),
+    }))
+  } else if (typeof style.sprite === 'string') {
+    style.sprite = new URL(style.sprite, window.location.origin).toString()
+  }
+  return style
+}
+
 function formatIsoMonth(isoMonth) {
   const [year, month] = isoMonth.split('-').map(Number)
   return monthYearFormatter.format(new Date(Date.UTC(year, month - 1, 1)))
@@ -213,15 +227,15 @@ export default {
 
       map.value = new maplibregl.Map({
         container: mapContainer.value,
-        style: currentStyleUrl(),
+        style: await loadStyle(currentStyleUrl()),
         center: [timeline.value[0].longitude, timeline.value[0].latitude],
         zoom: timeline.value[0].map_zoom_level ?? 12,
         interactive: false,
         attributionControl: { compact: true },
       })
 
-      themeObserver = new MutationObserver(() => {
-        const next = currentStyleUrl()
+      themeObserver = new MutationObserver(async () => {
+        const next = await loadStyle(currentStyleUrl())
         if (map.value && map.value.getStyle()?.sprite !== undefined) {
           map.value.setStyle(next)
         }

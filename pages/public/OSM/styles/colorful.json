@@ -4,11 +4,11 @@
   "metadata": {
     "license": "https://creativecommons.org/publicdomain/zero/1.0/"
   },
-  "glyphs": "https://vector.openstreetmap.org/styles/shortbread/fonts/{fontstack}/{range}.pbf",
+  "glyphs": "/OSM/fonts/{fontstack}/{range}.pbf",
   "sprite": [
     {
       "id": "basics",
-      "url": "https://vector.openstreetmap.org/styles/shortbread/sprites/basics/sprites"
+      "url": "/OSM/sprites/basics/sprites"
     }
   ],
   "sources": {
