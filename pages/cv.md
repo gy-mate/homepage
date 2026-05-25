@@ -7,129 +7,109 @@ pageClass: cv-page
 
 <script setup>
 import CvMap from '.vitepress/components/CvMap.vue'
-
-const locations = [
-  { lat: 47.542476, lng: 18.963545, zoom: 14 },
-  { lat: 47.190,    lng: 19.303,    zoom:  7 },
-  { lat: 47.4984830, lng: 19.0575269, zoom: 13 },
-  { lat: 46.8583,   lng: 17.7855,   zoom: 10 },
-  { lat: 47.43267,  lng: 19.26006,  zoom: 14 },
-  { lat: 47.464302, lng: 19.020614, zoom: 15 },
-  { lat: 47.946397, lng: 21.705031, zoom: 15 },
-  { lat: 46.914220, lng: 19.698207, zoom: 14 },
-  { lat: 47.183019, lng: 18.425000, zoom: 15 },
-  { lat: 47.489246, lng: 19.076184, zoom: 17 },
-  { lat: 47.5004,   lng: 19.0826,   zoom: 14 },
-  { lat: 47.794126, lng: 18.742011, zoom: 14 },
-  { lat: 47.474829, lng: 19.098825, zoom: 17 },
-  { lat: 47.474411, lng: 19.062020, zoom: 16 },
-  { lat: 47.472775, lng: 19.060062, zoom: 16 },
-  { lat: 47.472989, lng: 19.053117, zoom: 17 },
-  { lat: 47.58741,  lng: 19.05012,  zoom: 12 },
-]
 </script>
 
-<CvMap :locations="locations">
+<CvMap>
 
-### Child Railway Employee
+## Child Railway Employee
 
-Hungarian State Railways (MÁV)
+<span class="cv-loc" data-lat="47.542476" data-lng="18.963545" data-zoom="14">Hungarian State Railways (MÁV)</span>
 
 Jun 2011 – Aug 2015
 
-### Co-Founder, then Board Member
+## Co-Founder, then Board Member
 
-Közlekedő Tömeg Egyesület
+<span class="cv-loc" data-lat="47.190" data-lng="19.303" data-zoom="7">Közlekedő Tömeg Egyesület</span>
 
 Jul 2016 – Dec 2019
 
-### Passenger Flow Surveyor
+## Passenger Flow Surveyor
 
-Centre for Budapest Transport (BKK)
+<span class="cv-loc" data-lat="47.4984830" data-lng="19.0575269" data-zoom="13">Centre for Budapest Transport (BKK)</span>
 
 Oct 2016 – Dec 2020
 
-### Infrastructure and Services Inspector
+## Infrastructure and Services Inspector
 
-Balaton Shipping Co. (BAHART)
+<span class="cv-loc" data-lat="46.8583" data-lng="17.7855" data-zoom="10">Balaton Shipping Co. (BAHART)</span>
 
 Aug 2017
 
-### Quality of Transport Surveyor
+## Quality of Transport Surveyor
 
-Budapest Airport
+<span class="cv-loc" data-lat="47.43267" data-lng="19.26006" data-zoom="14">Budapest Airport</span>
 
 Feb 2018
 
-### Station and Train Attendant
+## Station and Train Attendant
 
-Hungarian State Railways (MÁV)
+<span class="cv-loc" data-lat="47.464302" data-lng="19.020614" data-zoom="15">Hungarian State Railways (MÁV)</span>
 
 Jun 2018 – Sep 2019
 
-### Customer Satisfaction Surveyor
+## Customer Satisfaction Surveyor
 
-Hungarian State Railways (MÁV)
+<span class="cv-loc" data-lat="47.946397" data-lng="21.705031" data-zoom="15">Hungarian State Railways (MÁV)</span>
 
 Dec 2018
 
-### Passenger Flow Survey Coordinator
+## Passenger Flow Survey Coordinator
 
-Centre for Kecskemét Transport (KeKo) / Mobilissimus Ltd.
+<span class="cv-loc" data-lat="46.914220" data-lng="19.698207" data-zoom="14">Centre for Kecskemét Transport (KeKo) / Mobilissimus Ltd.</span>
 
 Apr 2019
 
-### Passenger Flow Surveyor
+## Passenger Flow Surveyor
 
-Hungarian State Railways (MÁV)
+<span class="cv-loc" data-lat="47.183019" data-lng="18.425000" data-zoom="15">Hungarian State Railways (MÁV)</span>
 
 Jun 2019
 
-### Matura
+## Matura
 
-Fazekas Mihály Gimnázium
+<span class="cv-loc" data-lat="47.489246" data-lng="19.076184" data-zoom="17">Fazekas Mihály Gimnázium</span>
 
 Sep 2013 – Jun 2019
 
-### Passenger Flow Survey Coordinator
+## Passenger Flow Survey Coordinator
 
-Centre for Budapest Transport (BKK)
+<span class="cv-loc" data-lat="47.5004" data-lng="19.0826" data-zoom="14">Centre for Budapest Transport (BKK)</span>
 
 Nov 2019
 
-### Passenger Flow Surveyor
+## Passenger Flow Surveyor
 
-Esztergom City Municipality / Mobilissimus Ltd.
+<span class="cv-loc" data-lat="47.794126" data-lng="18.742011" data-zoom="14">Esztergom City Municipality / Mobilissimus Ltd.</span>
 
 Jun 2021
 
-### Passenger Information Assistant
+## Passenger Information Assistant
 
-Volánbusz Plc.
+<span class="cv-loc" data-lat="47.474829" data-lng="19.098825" data-zoom="17">Volánbusz Plc.</span>
 
 Aug 2021
 
-### Sociologist (BA)
+## Sociologist (BA)
 
-Eötvös Loránd University (ELTE)
+<span class="cv-loc" data-lat="47.474411" data-lng="19.062020" data-zoom="16">Eötvös Loránd University (ELTE)</span>
 
 Sep 2019 – Jun 2022
 
-### Computer Science Operational Engineer (BProf)
+## Computer Science Operational Engineer (BProf)
 
-Budapest University of Technology and Economics (BME)
+<span class="cv-loc" data-lat="47.472775" data-lng="19.060062" data-zoom="16">Budapest University of Technology and Economics (BME)</span>
 
 Sep 2022 – Jul 2025
 
-### Project Manager
+## Project Manager
 
-Schönherz Computer Science Club (KSZK)
+<span class="cv-loc" data-lat="47.472989" data-lng="19.053117" data-zoom="17">Schönherz Computer Science Club (KSZK)</span>
 
 May 2024 – present
 
-### Java Developer
+## Java Developer
 
-P92 Digital
+<span class="cv-loc" data-lat="47.58741" data-lng="19.05012" data-zoom="12">P92 Digital</span>
 
 Sep 2024 – present
 

@@ -37,20 +37,28 @@ function readHeadingText(headingElement) {
   return clone.textContent.trim()
 }
 
-function relocateEntriesIntoTriggers(indexContainer, triggerElements, locations) {
+function relocateEntriesIntoTriggers(indexContainer, triggersContainer) {
   const headings = Array.from(
     indexContainer.querySelectorAll('h1, h2, h3, h4, h5, h6')
   )
   const timeline = []
   const headingIdToEntryIndex = new Map()
   const anchorPlaceholders = []
-  headings.forEach((headingElement, entryIndex) => {
-    const triggerElement = triggerElements[entryIndex]
-    const locationCoords = locations[entryIndex]
-    if (!triggerElement || !locationCoords) return
-
+  headings.forEach((headingElement) => {
     const organizationParagraph = headingElement.nextElementSibling
     const dateParagraph = organizationParagraph?.nextElementSibling
+    const locationSpan = organizationParagraph?.querySelector('.cv-loc')
+    if (!locationSpan) return
+
+    const latitude = parseFloat(locationSpan.dataset.lat)
+    const longitude = parseFloat(locationSpan.dataset.lng)
+    const mapZoomLevel = parseFloat(locationSpan.dataset.zoom)
+    if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return
+
+    const entryIndex = timeline.length
+    const triggerElement = document.createElement('div')
+    triggerElement.className = 'cv-trigger'
+    triggersContainer.appendChild(triggerElement)
 
     let anchorPlaceholder = null
     const headingId = headingElement.id
@@ -74,11 +82,11 @@ function relocateEntriesIntoTriggers(indexContainer, triggerElements, locations)
 
     timeline.push({
       job_title: readHeadingText(headingElement),
-      organization: organizationParagraph?.textContent?.trim() ?? '',
+      organization: locationSpan.textContent.trim(),
       date_range: dateParagraph?.textContent?.trim() ?? '',
-      latitude: locationCoords.lat,
-      longitude: locationCoords.lng,
-      map_zoom_level: locationCoords.zoom,
+      latitude,
+      longitude,
+      map_zoom_level: mapZoomLevel,
     })
   })
   return { timeline, headingIdToEntryIndex, anchorPlaceholders }
@@ -109,13 +117,7 @@ function clamp(value, min, max) {
 }
 
 export default {
-  props: {
-    locations: {
-      type: Array,
-      required: true,
-    },
-  },
-  setup(props) {
+  setup() {
     const mapContainer = ref(null)
     const triggers = ref(null)
     const indexContent = ref(null)
@@ -294,13 +296,9 @@ export default {
     }
 
     onMounted(async () => {
-      const triggerElements = Array.from(
-        triggers.value.querySelectorAll('.cv-trigger')
-      )
       const relocated = relocateEntriesIntoTriggers(
         indexContent.value,
-        triggerElements,
-        props.locations
+        triggers.value
       )
       timeline.value = relocated.timeline
       headingIdToEntryIndex = relocated.headingIdToEntryIndex

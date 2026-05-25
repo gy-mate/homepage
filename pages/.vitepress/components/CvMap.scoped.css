@@ -11,18 +11,6 @@
   margin-bottom: calc(-100vh + var(--vp-nav-height, 64px));
 }
 
-.cv-triggers {
-  position: relative;
-  z-index: 2;
-  pointer-events: none;
-}
-
-.cv-trigger {
-  position: relative;
-  height: 275vh;
-  scroll-snap-align: start;
-}
-
 .cv-index-content {
   position: absolute;
   top: 0;
@@ -34,8 +22,3 @@
   white-space: nowrap;
 }
 
-@media (max-width: 640px) {
-  .cv-trigger {
-    height: 150vh;
-  }
-}

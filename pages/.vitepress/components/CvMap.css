@@ -1,3 +1,21 @@
+.cv-triggers {
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.cv-trigger {
+  position: relative;
+  height: 275vh;
+  scroll-snap-align: start;
+}
+
+@media (max-width: 640px) {
+  .cv-trigger {
+    height: 150vh;
+  }
+}
+
 .cv-trigger__sr {
   position: absolute;
   top: 0;
