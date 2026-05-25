@@ -18,12 +18,15 @@
 }
 
 .cv-trigger {
+  position: relative;
   height: 275vh;
   scroll-snap-align: start;
 }
 
-.cv-trigger__sr {
+.cv-index-content {
   position: absolute;
+  top: 0;
+  left: 0;
   width: 1px;
   height: 1px;
   overflow: hidden;

@@ -5,13 +5,13 @@
     <div ref="mapContainer" class="cv-map" aria-hidden="true"></div>
     <div ref="triggers" class="cv-triggers">
       <div
-        v-for="(item, i) in timeline"
-        :key="i"
-        :data-idx="i"
+        v-for="(_location, index) in locations"
+        :key="index"
         class="cv-trigger"
-      >
-        <span class="cv-trigger__sr">{{ formatDateRange(item.from_date, item.to_date) }} – {{ item.job_title }}, {{ item.organization }}</span>
-      </div>
+      ></div>
+    </div>
+    <div ref="indexContent" class="cv-index-content" aria-hidden="true">
+      <slot />
     </div>
   </div>
 </template>
