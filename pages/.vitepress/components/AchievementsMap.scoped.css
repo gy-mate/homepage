@@ -1,0 +1,21 @@
+.achievements-map-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.achievements-map {
+  width: 100%;
+  height: calc(100vh - var(--vp-nav-height, 64px));
+  margin-top: var(--vp-nav-height, 64px);
+}
+
+.achievements-index-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

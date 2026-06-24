@@ -1,6 +1,13 @@
 import { onBeforeUnmount, onMounted, ref, shallowRef } from 'vue'
 import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import {
+  addCardMarker,
+  currentStyleUrl,
+  loadStyle,
+  parseEntry,
+  watchThemeStyle,
+} from './Map.js'
 
 const REST_RATIO = 0.1
 const SEGMENT_FIT_PADDING = 80
@@ -8,34 +15,6 @@ const ZOOM_OUT_PHASE_END = 0.35
 const PAN_PHASE_START = ZOOM_OUT_PHASE_END
 const PAN_PHASE_END = 0.65
 const ZOOM_IN_PHASE_START = PAN_PHASE_END
-
-const STYLES_FOLDER = '/OSM/styles/'
-const STYLE_LIGHT = STYLES_FOLDER + 'colorful.json'
-const STYLE_DARK = STYLES_FOLDER + 'eclipse.json'
-
-function currentStyleUrl() {
-  return document.documentElement.classList.contains('dark') ? STYLE_DARK : STYLE_LIGHT
-}
-
-async function loadStyle(styleUrl) {
-  const response = await fetch(styleUrl)
-  const style = await response.json()
-  if (Array.isArray(style.sprite)) {
-    style.sprite = style.sprite.map((sprite) => ({
-      ...sprite,
-      url: new URL(sprite.url, window.location.origin).toString(),
-    }))
-  } else if (typeof style.sprite === 'string') {
-    style.sprite = new URL(style.sprite, window.location.origin).toString()
-  }
-  return style
-}
-
-function readHeadingText(headingElement) {
-  const clone = headingElement.cloneNode(true)
-  clone.querySelectorAll('a.header-anchor').forEach((anchor) => anchor.remove())
-  return clone.textContent.trim()
-}
 
 function relocateEntriesIntoTriggers(indexContainer, triggersContainer) {
   const headings = Array.from(
@@ -45,15 +24,9 @@ function relocateEntriesIntoTriggers(indexContainer, triggersContainer) {
   const headingIdToEntryIndex = new Map()
   const anchorPlaceholders = []
   headings.forEach((headingElement) => {
-    const organizationParagraph = headingElement.nextElementSibling
-    const dateParagraph = organizationParagraph?.nextElementSibling
-    const locationSpan = organizationParagraph?.querySelector('.cv-loc')
-    if (!locationSpan) return
-
-    const latitude = parseFloat(locationSpan.dataset.lat)
-    const longitude = parseFloat(locationSpan.dataset.lng)
-    const mapZoomLevel = parseFloat(locationSpan.dataset.zoom)
-    if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return
+    const parsed = parseEntry(headingElement)
+    if (!parsed) return
+    const { organizationParagraph, dateParagraph, entry } = parsed
 
     const entryIndex = timeline.length
     const triggerElement = document.createElement('div')
@@ -80,14 +53,7 @@ function relocateEntriesIntoTriggers(indexContainer, triggersContainer) {
     if (dateParagraph) screenReaderWrapper.appendChild(dateParagraph)
     triggerElement.appendChild(screenReaderWrapper)
 
-    timeline.push({
-      job_title: readHeadingText(headingElement),
-      organization: locationSpan.textContent.trim(),
-      date_range: dateParagraph?.textContent?.trim() ?? '',
-      latitude,
-      longitude,
-      map_zoom_level: mapZoomLevel,
-    })
+    timeline.push(entry)
   })
   return { timeline, headingIdToEntryIndex, anchorPlaceholders }
 }
@@ -313,38 +279,11 @@ export default {
         attributionControl: { compact: true },
       })
 
-      themeObserver = new MutationObserver(async () => {
-        const next = await loadStyle(currentStyleUrl())
-        if (map.value && map.value.getStyle()?.sprite !== undefined) {
-          map.value.setStyle(next)
-        }
-      })
-      themeObserver.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ['class'],
-      })
+      themeObserver = watchThemeStyle(map)
 
       map.value.on('load', () => {
         timeline.value.forEach((item) => {
-          const cardElement = document.createElement('div')
-          cardElement.className = 'cv-card'
-          cardElement.innerHTML = `
-            <div class="cv-card__inner">
-              <div class="cv-card__body">
-                <div class="cv-card__date"></div>
-                <div class="cv-card__title"></div>
-                <div class="cv-card__org"></div>
-              </div>
-              <div class="cv-card__pin"></div>
-            </div>
-          `
-          cardElement.querySelector('.cv-card__date').textContent = item.date_range
-          cardElement.querySelector('.cv-card__title').textContent = item.job_title
-          cardElement.querySelector('.cv-card__org').textContent = item.organization
-          const marker = new maplibregl.Marker({ element: cardElement, anchor: 'bottom' })
-            .setLngLat([item.longitude, item.latitude])
-            .addTo(map.value)
-          markers.push(marker)
+          markers.push(addCardMarker(map.value, item))
         })
 
         recomputeSegmentZoomDips()
