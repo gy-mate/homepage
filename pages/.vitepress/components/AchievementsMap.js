@@ -1,5 +1,5 @@
 import { onBeforeUnmount, onMounted, ref, shallowRef } from 'vue'
-import maplibregl from 'maplibre-gl'
+import { LngLatBounds, Map as MapLibreMap, NavigationControl } from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import {
   addCardMarker,
@@ -25,7 +25,7 @@ export default {
       const entries = collectEntries(indexContent.value)
       const firstEntry = entries[0]
 
-      map.value = new maplibregl.Map({
+      map.value = new MapLibreMap({
         container: mapContainer.value,
         style: await loadStyle(currentStyleUrl()),
         center: firstEntry
@@ -34,7 +34,7 @@ export default {
         zoom: firstEntry ? firstEntry.map_zoom_level ?? FALLBACK_ZOOM : FALLBACK_ZOOM,
         attributionControl: { compact: true },
       })
-      map.value.addControl(new maplibregl.NavigationControl(), 'top-right')
+      map.value.addControl(new NavigationControl(), 'top-right')
 
       themeObserver = watchThemeStyle(map)
 
@@ -44,7 +44,7 @@ export default {
         })
 
         if (entries.length > 1) {
-          const bounds = new maplibregl.LngLatBounds()
+          const bounds = new LngLatBounds()
           entries.forEach((item) => bounds.extend([item.longitude, item.latitude]))
           map.value.fitBounds(bounds, { padding: FIT_BOUNDS_PADDING })
         }

@@ -1,4 +1,8 @@
-import maplibregl from 'maplibre-gl'
+import { Marker, setWorkerUrl } from 'maplibre-gl'
+import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
+import './Map.css'
+
+setWorkerUrl(workerUrl)
 
 const STYLES_FOLDER = '/OSM/styles/'
 const STYLE_LIGHT = STYLES_FOLDER + 'colorful.json'
@@ -98,7 +102,7 @@ export function createCardElement(item) {
 
 export function addCardMarker(map, item) {
   const cardElement = createCardElement(item)
-  return new maplibregl.Marker({ element: cardElement, anchor: 'bottom' })
+  return new Marker({ element: cardElement, anchor: 'bottom' })
     .setLngLat([item.longitude, item.latitude])
     .addTo(map)
 }

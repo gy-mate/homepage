@@ -1,5 +1,5 @@
 import { onBeforeUnmount, onMounted, ref, shallowRef } from 'vue'
-import maplibregl from 'maplibre-gl'
+import { LngLatBounds, Map as MapLibreMap } from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import {
   addCardMarker,
@@ -140,7 +140,7 @@ export default {
           segmentDipTargetZooms.push(endpointMinZoom)
           continue
         }
-        const fitBounds = new maplibregl.LngLatBounds()
+        const fitBounds = new LngLatBounds()
         fitBounds.extend([fromEvent.longitude, fromEvent.latitude])
         fitBounds.extend([toEvent.longitude, toEvent.latitude])
         const fitCamera = map.value.cameraForBounds(fitBounds, {
@@ -270,7 +270,7 @@ export default {
       headingIdToEntryIndex = relocated.headingIdToEntryIndex
       anchorPlaceholders = relocated.anchorPlaceholders
 
-      map.value = new maplibregl.Map({
+      map.value = new MapLibreMap({
         container: mapContainer.value,
         style: await loadStyle(currentStyleUrl()),
         center: [timeline.value[0].longitude, timeline.value[0].latitude],

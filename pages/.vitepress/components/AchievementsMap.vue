@@ -10,4 +10,3 @@
 </template>
 
 <style scoped src="./AchievementsMap.scoped.css"></style>
-<style src="./Map.css"></style>

@@ -12,4 +12,3 @@
 
 <style scoped src="./CvMap.scoped.css"></style>
 <style src="./CvMap.css"></style>
-<style src="./Map.css"></style>
