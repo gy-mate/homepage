@@ -4,7 +4,7 @@ You can find the list of GTFS feeds that I maintain below.
 
 ## Hungary
 
-### Budapest
+### Budapest Metropolitan Area
 
 - [Funicular](/gtfs/gtfs_hu_funicular.zip)
     - Available in [Transitous](https://github.com/public-transport/transitous/pull/1789) and [MenetrendApp](https://web.archive.org/web/20260117233141/https://blog.menetrend.app/2026/01/05/uj-vonal-budavari-siklo/).
@@ -12,3 +12,7 @@ You can find the list of GTFS feeds that I maintain below.
     - Available in [Transitous](https://github.com/public-transport/transitous/pull/1950) and [MenetrendApp](https://web.archive.org/web/20260224073920/https://blog.menetrend.app/2026/02/23/uj-vonal-libego/).
 - [Üröm](/gtfs/gtfs_hu_urom.zip)
     - Available in [Transitous](https://github.com/public-transport/transitous/pull/1994) and [MenetrendApp](https://blog.menetrend.app/2026/03/07/uj-varos-urom/).
+
+### Lake Balaton
+
+- [Tihany ferry](/gtfs/gtfs_hu_bahart-ferry.zip)
