@@ -52,6 +52,15 @@ export default defineConfig({
             { text: 'Ideas', link: '/projects/ideas' },
           ]
         }
+      ],
+      '/misc' : [
+        {
+          text: 'Miscellaneous',
+          items: [
+            { text: 'Commands', link: '/misc/commands' },
+            { text: 'Java', link: '/misc/java' },
+          ]
+        }
       ]
     },
     
