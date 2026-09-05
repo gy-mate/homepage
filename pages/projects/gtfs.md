@@ -11,8 +11,14 @@ You can find the list of GTFS feeds that I maintain below.
 - [Chairlift](/gtfs/gtfs_hu_chairlift.zip)
     - Available in [Transitous](https://github.com/public-transport/transitous/pull/1950) and [MenetrendApp](https://web.archive.org/web/20260224073920/https://blog.menetrend.app/2026/02/23/uj-vonal-libego/).
 - [Üröm](/gtfs/gtfs_hu_urom.zip)
-    - Available in [Transitous](https://github.com/public-transport/transitous/pull/1994) and [MenetrendApp](https://blog.menetrend.app/2026/03/07/uj-varos-urom/).
+    - Available in [Transitous](https://github.com/public-transport/transitous/pull/1994) and [MenetrendApp](https://web.archive.org/web/20260309171707/https://blog.menetrend.app/2026/03/07/uj-varos-urom/).
+- [Dunakeszi ferry](/gtfs/gtfs_hu_dunakeszi-ferry.zip)
+    - Available in [Transitous](https://github.com/public-transport/transitous/pull/2467).
+- [Pásztor ferry](/gtfs/gtfs_hu_pasztor-ferry.zip)
+    - Available in [Transitous](https://github.com/public-transport/transitous/pull/2462).
+
 
 ### Lake Balaton
 
 - [Tihany ferry](/gtfs/gtfs_hu_bahart-ferry.zip)
+    - Available in [Transitous](https://github.com/public-transport/transitous/pull/2419) and MenetrendApp.
