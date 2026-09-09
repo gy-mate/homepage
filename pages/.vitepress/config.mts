@@ -36,6 +36,7 @@ export default defineConfig({
           items: [
             { text: 'MÁV', link: '/projects/mav' },
             { text: 'BKK', link: '/projects/bkk' },
+            { text: 'Sociology BA Thesis', link: '/projects/sa' },
           ]
         },
         {
