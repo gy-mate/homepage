@@ -6,7 +6,7 @@ pageClass: cv-page
 ---
 
 <script setup>
-import CvMap from '.vitepress/components/CvMap.vue'
+import CvMap from './.vitepress/components/CvMap.vue'
 </script>
 
 <CvMap>

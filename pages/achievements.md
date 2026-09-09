@@ -6,7 +6,7 @@ pageClass: cv-page
 ---
 
 <script setup>
-import AchievementsMap from '.vitepress/components/AchievementsMap.vue'
+import AchievementsMap from './.vitepress/components/AchievementsMap.vue'
 </script>
 
 <AchievementsMap>
