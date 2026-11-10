@@ -1,15 +1,5 @@
 # Useful Commands
 
-## Docker
-
-### Freeing up space
-
-1. Start all used containers
-2. Run:
-    ```sh
-    docker system prune --force
-    ```
-
 ## Printer
 
 ### Scanning
