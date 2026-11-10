@@ -26,5 +26,6 @@ features:
   - icon:
       src: /OSM_logo.webp
     title: OpenStreetMap
+    link: https://www.openstreetmap.org/user/gymate
     details: I'm one of the top Hungarian contributors and a member of the OpenStreetMap&nbsp;Foundation. I use it both for work and my personal projects.
 ---
